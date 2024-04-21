@@ -1,6 +1,5 @@
 import { Toaster } from "react-hot-toast";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import './App.css'
 // AUTH IMPORTS
 import Login from "./auth/Login";
 import Signup from "./auth/Signup";
@@ -22,6 +21,7 @@ import Calendar from "./pages/process/calendar/Calendar";
 import Cutting from "./pages/process/cutting/Cutting";
 import Stitching from "./pages/process/stitching/Stitching";
 import Stones from "./pages/process/stones/Stones";
+import './App.css'
 
 function App() {
 
