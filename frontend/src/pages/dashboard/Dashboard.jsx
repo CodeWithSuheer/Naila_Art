@@ -11,18 +11,36 @@ import { IoLogOutOutline } from "react-icons/io5";
 
 
 const Dashboard = () => {
-    let user = {
-        name: "bilal Ali"
-    };
-    // const dispatch = useDispatch();
     const navigate = useNavigate();
     const location = useLocation();
+    const menuRef = useRef(null);
+    const menuButtonRef = useRef(null);
+
+    // STATES
     const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-
     const [isMenuOpen, setMenuOpen] = useState(false);
-    const menuButtonRef = useRef(null);
-    const menuRef = useRef(null);
+
+    const [isInStockDropdownOpen, setIsInStockDropdownOpen] = useState(false);
+    const [isBillsDropdownOpen, setIsBillsDropdownOpen] = useState(false);
+    const [isProcessDropdownOpen, setIsProcessDropdownOpen] = useState(false);
+
+    const toggleInStockDropdown = () => {
+        setIsInStockDropdownOpen((prevState) => !prevState);
+        setIsBillsDropdownOpen(false); // Close Bills dropdown when opening In Stock dropdown
+    };
+
+    const toggleBillsDropdown = () => {
+        setIsBillsDropdownOpen((prevState) => !prevState);
+        setIsInStockDropdownOpen(false); // Close In Stock dropdown when opening Bills dropdown
+    };
+
+    const toggleProcessDropdown = () => {
+        setIsProcessDropdownOpen((prevState) => !prevState);
+        setIsInStockDropdownOpen(false);
+        setIsBillsDropdownOpen(false);
+    };
+
 
 
     // const { user, isError, isSuccess, isLoading, message } = useSelector((state) => state.auth);
@@ -46,6 +64,10 @@ const Dashboard = () => {
     //         navigate('/login')
     //     }
     // }
+
+    let user = {
+        name: "bilal Ali"
+    };
 
     const toggleMenu = () => {
         setMenuOpen((prev) => !prev);
@@ -80,7 +102,6 @@ const Dashboard = () => {
         }
         localStorage.setItem("theme", theme);
     }, [theme]);
-
 
     const handleThemeChange = () => {
         setTheme(theme === "dark" ? "light" : "dark");
@@ -128,7 +149,7 @@ const Dashboard = () => {
                                 <span className="sr-only">Toggle sidebar</span>
                             </button>
 
-                            <Link to="/" className="hidden sm:flex items-center justify-between mr-4">
+                            <Link to="/dashboard" className="hidden sm:flex items-center justify-between mr-4">
                                 <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
                                     NAILA ARTS
                                 </span>
@@ -214,48 +235,138 @@ const Dashboard = () => {
                     </div>
                 </nav>
                 {/* ---------------- SIDEBAR ---------------- */}
-                <aside
-                    aria-label="Sidenav"
-                    className={`fixed top-0 left-0 z-40 w-64 h-screen pt-14 transition-transform ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-                        } bg-white border-r border-gray-200 md:translate-x-0 dark:bg-gray-800 dark:border-gray-700`}
-                >
+                <aside aria-label="Sidenav" className={`fixed top-0 left-0 z-40 w-56 xl:w-64 h-screen pt-14 transition-transform ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"} bg-white border-r border-gray-200 md:translate-x-0 dark:bg-gray-800 dark:border-gray-700`}>
+
                     <div className="overflow-y-auto py-5 h-full bg-[#FAFAFA] dark:bg-gray-800">
 
                         <ul className="pt-10">
+
+                            {/* DASHBOARD */}
                             <li>
                                 <Link to="/dashboard" className={`h-14 pl-4 border-t flex items-center p-2 text-base font-medium ${location.pathname === "/dashboard" ? "bg-[#434343] text-white dark:bg-gray-600 dark:text-gray-100 dark:border-gray-400" : "bg-[#FAFAFA] dark:bg-gray-800 text-gray-900 dark:text-gray-200 dark:border-gray-500 hover:bg-gray-100"} group`}>
                                     {/* <FaStore size={22} className="text-gray-500 dark:text-gray-400" /> */}
                                     <span className="ml-3">Dashboard</span>
                                 </Link>
                             </li>
-                            <li>
-                                <Link to="/dashboard/suits" className={`h-14 pl-4 border-t flex items-center p-2 text-base font-medium ${location.pathname === "/dashboard/suits" ? "bg-[#434343] text-white dark:bg-gray-600 dark:text-gray-100 dark:border-gray-400" : "bg-[#FAFAFA] dark:bg-gray-800 text-gray-900 dark:text-gray-200 dark:border-gray-500 hover:bg-gray-100"} group`}>
-                                    {/* <FaStore size={22} className="text-gray-500 dark:text-gray-400" /> */}
-                                    <span className="ml-3">Suits</span>
-                                </Link>
+
+                            {/* INSTOCK DROPDOWN */}
+                            <li className="relative">
+                                <button
+                                    className="h-14 pl-4 w-full border-t flex items-center p-2 text-base font-medium bg-[#FAFAFA] dark:bg-gray-800 text-gray-900 dark:text-gray-200 dark:border-gray-500 hover:bg-gray-100 group"
+                                    onClick={toggleInStockDropdown}
+                                >
+                                    <span className="ml-3">In Stock</span>
+                                    <svg
+                                        className={`ml-auto w-4 h-4 transform ${isInStockDropdownOpen ? 'rotate-180' : ''} transition-transform`}
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor"
+                                    >
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                                    </svg>
+                                </button>
+                                {isInStockDropdownOpen && (
+                                    <ul className="absolute left-0 z-10 mt-2 w-full border border-gray-200 rounded shadow-lg dark:bg-gray-800 dark:border-gray-700">
+
+                                        <li>
+                                            <Link to="/dashboard/suits" className={`h-14 pl-12 border-t flex items-center p-2 text-base cursor-pointer font-medium ${location.pathname === "/dashboard/suits" ? "bg-[#434343] text-white dark:bg-gray-600 dark:text-gray-100 dark:border-gray-400" : "bg-[#FAFAFA] dark:bg-gray-800 text-gray-900 dark:text-gray-200 dark:border-gray-500 hover:bg-gray-100"} group`}>Suits</Link>
+                                        </li>
+                                        <li>
+                                            <Link to="/dashboard/base" className={`h-14 pl-12 border-t flex items-center p-2 text-base cursor-pointer font-medium ${location.pathname === "/dashboard/base" ? "bg-[#434343] text-white dark:bg-gray-600 dark:text-gray-100 dark:border-gray-400" : "bg-[#FAFAFA] dark:bg-gray-800 text-gray-900 dark:text-gray-200 dark:border-gray-500 hover:bg-gray-100"} group`}>Base</Link>
+                                        </li>
+                                        <li>
+                                            <Link to="/dashboard/lace" className={`h-14 pl-12 border-t flex items-center p-2 text-base cursor-pointer font-medium ${location.pathname === "/dashboard/lace" ? "bg-[#434343] text-white dark:bg-gray-600 dark:text-gray-100 dark:border-gray-400" : "bg-[#FAFAFA] dark:bg-gray-800 text-gray-900 dark:text-gray-200 dark:border-gray-500 hover:bg-gray-100"} group`}>Lace</Link>
+                                        </li>
+                                        <li>
+                                            <Link to="/dashboard/bag" className={`h-14 pl-12 border-t flex items-center p-2 text-base cursor-pointer font-medium ${location.pathname === "/dashboard/bag" ? "bg-[#434343] text-white dark:bg-gray-600 dark:text-gray-100 dark:border-gray-400" : "bg-[#FAFAFA] dark:bg-gray-800 text-gray-900 dark:text-gray-200 dark:border-gray-500 hover:bg-gray-100"} group`}>Bag</Link>
+                                        </li>
+                                        <li>
+                                            <Link to="/dashboard/accessories" className={`h-14 pl-12 border-t flex items-center p-2 text-base cursor-pointer font-medium ${location.pathname === "/dashboard/accessories" ? "bg-[#434343] text-white dark:bg-gray-600 dark:text-gray-100 dark:border-gray-400" : "bg-[#FAFAFA] dark:bg-gray-800 text-gray-900 dark:text-gray-200 dark:border-gray-500 hover:bg-gray-100"} group`}>Accessories</Link>
+                                        </li>
+
+                                        <li>
+                                            <Link to="/dashboard/expense" className={`h-14 pl-12 border-t flex items-center p-2 text-base cursor-pointer font-medium ${location.pathname === "/dashboard/expense" ? "bg-[#434343] text-white dark:bg-gray-600 dark:text-gray-100 dark:border-gray-400" : "bg-[#FAFAFA] dark:bg-gray-800 text-gray-900 dark:text-gray-200 dark:border-gray-500 hover:bg-gray-100"} group`}>Expense</Link>
+                                        </li>
+
+                                    </ul>
+                                )}
                             </li>
-                            <li>
-                                <Link to="/dashboard/base" className={`h-14 pl-4 border-t flex items-center p-2 text-base font-medium ${location.pathname === "/dashboard/base" ? "bg-[#434343] text-white dark:bg-gray-600 dark:text-gray-100 dark:border-gray-400" : "bg-[#FAFAFA] dark:bg-gray-800 text-gray-900 dark:text-gray-200 dark:border-gray-500 hover:bg-gray-100"} group`}>
-                                    {/* <FaStore size={22} className="text-gray-500 dark:text-gray-400" /> */}
-                                    <span className="ml-3">Base</span>
-                                </Link>
+
+                            {/* PROCESS DROPDOWN */}
+                            <li className="relative">
+                                <button
+                                    className="h-14 pl-4 w-full border-t flex items-center p-2 text-base font-medium bg-[#FAFAFA] dark:bg-gray-800 text-gray-900 dark:text-gray-200 dark:border-gray-500 hover:bg-gray-100 group"
+                                    onClick={toggleProcessDropdown}
+                                >
+                                    <span className="ml-3">Process</span>
+                                    <svg
+                                        className={`ml-auto w-4 h-4 transform ${isProcessDropdownOpen ? 'rotate-180' : ''} transition-transform`}
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor"
+                                    >
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                                    </svg>
+                                </button>
+                                {isProcessDropdownOpen && (
+                                    <ul className="absolute left-0 z-10 mt-2 w-full border border-gray-200 rounded shadow-lg dark:bg-gray-800 dark:border-gray-700">
+
+                                        <li>
+                                            <Link to="/dashboard/embroidery" className={`h-14 pl-12 border-t flex items-center p-2 text-base cursor-pointer font-medium ${location.pathname === "/dashboard/embroidery" ? "bg-[#434343] text-white dark:bg-gray-600 dark:text-gray-100 dark:border-gray-400" : "bg-[#FAFAFA] dark:bg-gray-800 text-gray-900 dark:text-gray-200 dark:border-gray-500 hover:bg-gray-100"} group`}>Embroidery</Link>
+                                        </li>
+                                        <li>
+                                            <Link to="/dashboard/calendar" className={`h-14 pl-12 border-t flex items-center p-2 text-base cursor-pointer font-medium ${location.pathname === "/dashboard/calendar" ? "bg-[#434343] text-white dark:bg-gray-600 dark:text-gray-100 dark:border-gray-400" : "bg-[#FAFAFA] dark:bg-gray-800 text-gray-900 dark:text-gray-200 dark:border-gray-500 hover:bg-gray-100"} group`}>Calendar</Link>
+                                        </li>
+                                        <li>
+                                            <Link to="/dashboard/cutting" className={`h-14 pl-12 border-t flex items-center p-2 text-base cursor-pointer font-medium ${location.pathname === "/dashboard/cutting" ? "bg-[#434343] text-white dark:bg-gray-600 dark:text-gray-100 dark:border-gray-400" : "bg-[#FAFAFA] dark:bg-gray-800 text-gray-900 dark:text-gray-200 dark:border-gray-500 hover:bg-gray-100"} group`}>Cutting</Link>
+                                        </li>
+                                        <li>
+                                            <Link to="/dashboard/stitching" className={`h-14 pl-12 border-t flex items-center p-2 text-base cursor-pointer font-medium ${location.pathname === "/dashboard/stitching" ? "bg-[#434343] text-white dark:bg-gray-600 dark:text-gray-100 dark:border-gray-400" : "bg-[#FAFAFA] dark:bg-gray-800 text-gray-900 dark:text-gray-200 dark:border-gray-500 hover:bg-gray-100"} group`}>Stitching</Link>
+                                        </li>
+                                        <li>
+                                            <Link to="/dashboard/stones" className={`h-14 pl-12 border-t flex items-center p-2 text-base cursor-pointer font-medium ${location.pathname === "/dashboard/stones" ? "bg-[#434343] text-white dark:bg-gray-600 dark:text-gray-100 dark:border-gray-400" : "bg-[#FAFAFA] dark:bg-gray-800 text-gray-900 dark:text-gray-200 dark:border-gray-500 hover:bg-gray-100"} group`}>Stones</Link>
+                                        </li>
+                                    </ul>
+                                )}
                             </li>
-                            <li>
-                                <Link to="/dashboard/embroidery" className={`h-14 pl-4 border-t flex items-center p-2 text-base font-medium ${location.pathname === "/dashboard/embroidery" ? "bg-[#434343] text-white dark:bg-gray-600 dark:text-gray-100 dark:border-gray-400" : "bg-[#FAFAFA] dark:bg-gray-800 text-gray-900 dark:text-gray-200 dark:border-gray-500 hover:bg-gray-100"} group`}>
-                                    {/* <FaStore size={22} className="text-gray-500 dark:text-gray-400" /> */}
-                                    <span className="ml-3">Embroidery</span>
-                                </Link>
+
+                            {/* BILLS DROPDOWN */}
+                            <li className="relative">
+                                <button
+                                    className="h-14 pl-4 w-full border-t flex items-center p-2 text-base font-medium bg-[#FAFAFA] dark:bg-gray-800 text-gray-900 dark:text-gray-200 dark:border-gray-500 hover:bg-gray-100 group"
+                                    onClick={toggleBillsDropdown}
+                                >
+                                    <span className="ml-3">Bills</span>
+                                    <svg
+                                        className={`ml-auto w-4 h-4 transform ${isBillsDropdownOpen ? 'rotate-180' : ''} transition-transform`}
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor"
+                                    >
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                                    </svg>
+                                </button>
+
+                                {isBillsDropdownOpen && (
+                                    <ul className="absolute left-0 z-10 mt-2 w-full border border-gray-200 rounded shadow-lg dark:bg-gray-800 dark:border-gray-700">
+
+                                        <li>
+                                            <Link to="/dashboard/naila-arts-buyer" className={`h-14 pl-12 border-t flex items-center p-2 text-base cursor-pointer font-medium ${location.pathname === "/dashboard/naila-arts-buyer" ? "bg-[#434343] text-white dark:bg-gray-600 dark:text-gray-100 dark:border-gray-400" : "bg-[#FAFAFA] dark:bg-gray-800 text-gray-900 dark:text-gray-200 dark:border-gray-500 hover:bg-gray-100"} group`}>Naila Arts Buyer</Link>
+                                        </li>
+                                        <li>
+                                            <Link to="/dashboard/processbills" className={`h-14 pl-12 border-t flex items-center p-2 text-base cursor-pointer font-medium ${location.pathname === "/dashboard/processbills" ? "bg-[#434343] text-white dark:bg-gray-600 dark:text-gray-100 dark:border-gray-400" : "bg-[#FAFAFA] dark:bg-gray-800 text-gray-900 dark:text-gray-200 dark:border-gray-500 hover:bg-gray-100"} group`}>Process Bills</Link>
+                                        </li>
+                                        <li>
+                                            <Link to="/dashboard/purchasebills" className={`h-14 pl-12 border-t flex items-center p-2 text-base cursor-pointer font-medium ${location.pathname === "/dashboard/purchasebills" ? "bg-[#434343] text-white dark:bg-gray-600 dark:text-gray-100 dark:border-gray-400" : "bg-[#FAFAFA] dark:bg-gray-800 text-gray-900 dark:text-gray-200 dark:border-gray-500 hover:bg-gray-100"} group`}>Purchase Bills</Link>
+                                        </li>
+                                    </ul>
+                                )}
                             </li>
-                            <li>
-                                <Link to="/dashboard/tissue" className={`h-14 pl-4 border-t flex items-center p-2 text-base font-medium ${location.pathname === "/dashboard/tissue" ? "bg-[#434343] text-white dark:bg-gray-600 dark:text-gray-100 dark:border-gray-400" : "bg-[#FAFAFA] dark:bg-gray-800 text-gray-900 dark:text-gray-200 dark:border-gray-500 hover:bg-gray-100"} group`}>
-                                    {/* <FaStore size={22} className="text-gray-500 dark:text-gray-400" /> */}
-                                    <span className="ml-3">Tissue</span>
-                                </Link>
-                            </li>
+
                         </ul>
 
                     </div>
-                    <div className="hidden absolute bottom-0 left-0 justify-center p-4 space-x-4 w-full lg:flex bg-white dark:bg-gray-800 z-20">
+                    {/* <div className="hidden absolute bottom-0 left-0 justify-center p-4 space-x-4 w-full lg:flex bg-white dark:bg-gray-800 z-20">
                         <a
                             className="inline-flex justify-center p-2 text-gray-500 rounded cursor-pointer dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-600"
                             href="#"
@@ -270,10 +381,10 @@ const Dashboard = () => {
                                 <path d="M5 4a1 1 0 00-2 0v7.268a2 2 0 000 3.464V16a1 1 0 102 0v-1.268a2 2 0 000-3.464V4zM11 4a1 1 0 10-2 0v1.268a2 2 0 000 3.464V16a1 1 0 102 0V8.732a2 2 0 000-3.464V4zM16 3a1 1 0 011 1v7.268a2 2 0 010 3.464V16a1 1 0 11-2 0v-1.268a2 2 0 010-3.464V4a1 1 0 011-1z" />
                             </svg>
                         </a>
-                    </div>
+                    </div> */}
                 </aside>
                 {/* ---------------- DASHBOARD ---------------- */}
-                <main className="md:ml-64 h-auto pt-16 bg-white dark:bg-gray-900">
+                <main className="lg:ml-56 xl:ml-64 h-auto pt-16 bg-white dark:bg-gray-900">
                     <Outlet />
                 </main>
             </div>

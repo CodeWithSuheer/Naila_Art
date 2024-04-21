@@ -1,11 +1,8 @@
 import React, { useState } from 'react'
+import data from '../suits/SuitsStockData';
 import { IoAdd } from "react-icons/io5";
-import { Link, useNavigate } from 'react-router-dom'
-import { MdRemoveRedEye } from "react-icons/md";
-import data from './EmbroideryData';
 
-const Embroidery = () => {
-    const navigate = useNavigate();
+const Expense = () => {
     const [isOpen, setIsOpen] = useState(false);
 
     const openModal = () => {
@@ -18,19 +15,16 @@ const Embroidery = () => {
         document.body.style.overflow = 'auto';
     };
 
+
     return (
         <>
             <section className='bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-600 mt-7 mb-0 mx-6 px-5 py-6 min-h-screen rounded-lg'>
                 {/* -------------- HEADER -------------- */}
                 <div className="header flex justify-between items-center pt-6 mx-2">
-                    <h1 className='text-gray-800 dark:text-gray-200 text-3xl font-medium'>Embroidery</h1>
+                    <h1 className='text-gray-800 dark:text-gray-200 text-3xl font-medium'>Expense</h1>
 
                     {/* <!-- search bar --> */}
-                    <div className="search_bar mr-2 flex gap-4 items-center">
-                        <button onClick={openModal} className="inline-block rounded-sm border border-gray-700 bg-gray-600 p-1.5 hover:bg-gray-800 focus:outline-none focus:ring-0">
-                            <IoAdd size={22} className='text-white' />
-                        </button>
-
+                    <div className="search_bar mr-2">
                         <div className="relative mt-4 md:mt-0">
                             <span className="absolute inset-y-0 left-0 flex items-center pl-3">
                                 <svg
@@ -51,7 +45,7 @@ const Embroidery = () => {
                             <input
                                 type="text"
                                 className="md:w-64 lg:w-72 py-2 pl-10 pr-4 text-gray-800 dark:text-gray-200 bg-transparent border border-[#D9D9D9] rounded-lg focus:border-[#D9D9D9] focus:outline-none focus:ring focus:ring-opacity-40 focus:ring-[#D9D9D9] placeholder:text-sm dark:placeholder:text-gray-300"
-                                placeholder="Search by Color"
+                                placeholder="Search by Design Number"
                             // value={searchText}
                             // onChange={handleSearch}
                             />
@@ -60,6 +54,22 @@ const Embroidery = () => {
                 </div>
 
                 <p className='w-full bg-gray-300 h-px mt-5'></p>
+
+                {/* -------------- TABS -------------- */}
+                <div className="tabs flex justify-between items-center my-5">
+                    <div className="tabs_button">
+                        <button className='border border-gray-500 bg-white dark:bg-gray-700 text-black dark:text-gray-100 px-5 py-2 mx-2 text-sm rounded-md'>All</button>
+                        <button className='border border-gray-500 bg-white dark:bg-gray-700 text-black dark:text-gray-100 px-5 py-2 mx-2 text-sm rounded-md'>Lawn</button>
+                        <button className='border border-gray-500 bg-white dark:bg-gray-700 text-black dark:text-gray-100 px-5 py-2 mx-2 text-sm rounded-md'>Lilan</button>
+                        <button className='border border-gray-500 bg-white dark:bg-gray-700 text-black dark:text-gray-100 px-5 py-2 mx-2 text-sm rounded-md'>Dhanak</button>
+                        <button className='border border-gray-500 bg-white dark:bg-gray-700 text-black dark:text-gray-100 px-5 py-2 mx-2 text-sm rounded-md'>Organza</button>
+                        <button className='border border-gray-500 bg-white dark:bg-gray-700 text-black dark:text-gray-100 px-5 py-2 mx-2 text-sm rounded-md'>Reshmi</button>
+                    </div>
+
+                    <button onClick={openModal} className="inline-block rounded-sm border border-gray-700 bg-gray-600 p-1.5 hover:bg-gray-800 focus:outline-none focus:ring-0">
+                        <IoAdd size={22} className='text-white' />
+                    </button>
+                </div>
 
 
                 {/* -------------- TABLE -------------- */}
@@ -71,25 +81,13 @@ const Embroidery = () => {
                                     className="px-6 py-3"
                                     scope="col"
                                 >
-                                    Sr# No
+                                    D# No
                                 </th>
                                 <th
                                     className="px-6 py-3"
                                     scope="col"
                                 >
-                                    Party Name
-                                </th>
-                                <th
-                                    className="px-6 py-3"
-                                    scope="col"
-                                >
-                                    Design No
-                                </th>
-                                <th
-                                    className="px-6 py-3"
-                                    scope="col"
-                                >
-                                    Date
+                                    Colors
                                 </th>
                                 <th
                                     className="px-6 py-3"
@@ -101,42 +99,35 @@ const Embroidery = () => {
                                     className="px-6 py-3"
                                     scope="col"
                                 >
-                                    Status
+                                    Cost Prices
                                 </th>
                                 <th
                                     className="px-6 py-3"
                                     scope="col"
                                 >
-                                    Details
+                                    Sales Prices
                                 </th>
                             </tr>
                         </thead>
                         <tbody>
                             {data.map((data, index) => (
                                 <tr key={index} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 dark:text-white">
-
-                                    <td className="px-6 py-4">
-                                        {data.serial_no}
-                                    </td>
-                                    <td className="px-6 py-4">
-                                        {data.party}
-                                    </td>
-                                    <td className="px-6 py-4">
+                                    <th className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                                        scope="row"
+                                    >
                                         {data.design_no}
-                                    </td>
+                                    </th>
                                     <td className="px-6 py-4">
-                                        {data.date}
+                                        {data.colors}
                                     </td>
                                     <td className="px-6 py-4">
                                         {data.quantity}
                                     </td>
                                     <td className="px-6 py-4">
-                                        {data.status}
+                                        {data.cost_pirce}
                                     </td>
-                                    <td className="pl-10 py-4">
-                                        <Link to={`/dashboard/embroidery-details/${data.id}`}>
-                                            <MdRemoveRedEye className='cursor-pointer' size={24} />
-                                        </Link>
+                                    <td className="px-6 py-4">
+                                        {data.sale_pirce}
                                     </td>
                                 </tr>
                             ))}
@@ -144,6 +135,7 @@ const Embroidery = () => {
                     </table>
                 </div>
             </section >
+
 
             {isOpen && (
                 <div
@@ -243,4 +235,4 @@ const Embroidery = () => {
     )
 }
 
-export default Embroidery
+export default Expense

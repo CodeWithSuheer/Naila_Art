@@ -44,7 +44,7 @@ const DashboardStats = () => {
         <>
             <section className='bg-white dark:bg-gray-900 mt-7 mb-0 mx-6 px-2 pt-6 pb-16 min-h-screen rounded-lg'>
                 {/* ------------ FIRST STATS BAR ------------*/}
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 lg:grid-cols-4 lg:gap-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 lg:grid-cols-2 xl:grid-cols-4 lg:gap-4">
                     <div class="h-40 rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 flex justify-start items-center">
                         <div className="stat_data pl-4">
                             <h3 className='text-gray-900 dark:text-gray-100 mt-1.5 text-md font-normal'>Gross Sale</h3>
@@ -81,14 +81,14 @@ const DashboardStats = () => {
                 {/* ------------ SECOND STATS BAR ------------*/}
                 <div className="mt-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-4">
 
-                    <div className="h-32 rounded-lg md:col-span-1 lg:col-span-3">
+                    <div className="rounded-lg md:col-span-1 lg:col-span-4 xl:col-span-3">
                         {/* BAR CHARTS */}
                         <div className="h-72 rounded-lg text-gray-900 dark:text-gray-100 border border-gray-200 dark:border-gray-700 w-full p-4">
                             Bar Chart
                         </div>
 
                         {/* TOTAL SUITES && ACCOUNTS */}
-                        <div className="mt-5 h-72 grid grid-cols-1 gap-4 lg:grid-cols-4 lg:gap-4 rounded-lg">
+                        <div className="mt-5 grid grid-cols-1 gap-4 lg:grid-cols-4 lg:gap-4 rounded-lg">
                             {/* TOTAL SUITE */}
                             <div className="rounded-lg lg:col-span-3">
                                 <div className="min-h-72 px-6 py-5 text-gray-900 dark:text-gray-200 rounded-lg border border-gray-200 dark:border-gray-700">
@@ -138,7 +138,7 @@ const DashboardStats = () => {
 
 
                     {/* SALES BY LOCATION */}
-                    <div className="min-h-screen  px-4 pt-5 pb-5 text-gray-900 dark:text-gray-200 rounded-lg border border-gray-200 dark:border-gray-700">
+                    <div className="px-4 pt-5 lg:col-span-4 xl:col-span-1 pb-5 text-gray-900 dark:text-gray-200 rounded-lg border border-gray-200 dark:border-gray-700">
                         <h2 className='mb-3 font-medium text-lg'>Sales By Locations</h2>
                         {citiesStats.map((data) => (
                             <div className="my-4 city flex justify-between items-center">
