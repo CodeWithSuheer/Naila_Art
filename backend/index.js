@@ -13,7 +13,7 @@ import branchRouter from "./routes/BranchRoutes.js";
 const app = express();
 app.use(cors({
     credentials:true,
-    origin:['*']
+    origin:['http://localhost:5173']
   }));
 
 app.use(express.json({limit:'50mb'}));
