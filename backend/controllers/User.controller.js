@@ -1,9 +1,8 @@
 import { validateOneMinuteExpiry, validateOtp } from "../middleware/ValidateOtp.js";
-import OtpModel from "../models/Otp.Model.js";
-import UserModel from "../models/User.Model.js";
 import bcrypt from "bcrypt";
 import { sendEmail } from "../utils/nodemailer.js";
-
+import { UserModel } from "../models/User.Model.js";
+import {OtpModel} from '../models/Otp.Model.js'
 export const signUp = async (req, res, next) => {
   try {
     const { email, name, password } = req.body;

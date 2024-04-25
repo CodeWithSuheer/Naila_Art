@@ -1,38 +1,38 @@
-import { DataTypes } from "sequelize";
-import sequelize from "../database/PostgreSQL.js";
+import mongoose from 'mongoose';
 
-const LaceModel = sequelize.define(
-  "Lace",
-  {
-    bill_no:{
-        type:DataTypes.INTEGER,
-        allowNull:false
-    },
-    name: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    category: {
-        type: DataTypes.STRING,
-        allowNull: false
-      },
-    r_date:{
-        type:DataTypes.DATE,
-        allowNull: false
-    },
-    quantity:{
-        type:DataTypes.INTEGER,
-        allowNull: false
-    },
-    cost_price:{
-        type:DataTypes.INTEGER,
-        allowNull: false
-    },
-    recently:{
-        type:DataTypes.STRING,
-        allowNull: false
-    },
-},
-  { timestamps: true }
-);
-export default LaceModel;
+
+
+const laceSchema = new mongoose.Schema({
+  bill_no: {
+    type: Number,
+    required: true
+  },
+  name: {
+    type: String,
+    required: true
+  },
+  category: {
+    type: String,
+    required: true
+  },
+  r_date: {
+    type: Date,
+    required: true
+  },
+  quantity: {
+    type: Number,
+    required: true
+  },
+  cost_price: {
+    type: Number,
+    required: true
+  },
+  recently: {
+    type: String,
+    required: true
+  }
+}, { timestamps: true });
+
+export const LaceModel = mongoose.model('Lace', laceSchema);
+
+

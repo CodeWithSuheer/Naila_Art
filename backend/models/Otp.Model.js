@@ -1,22 +1,22 @@
-import { DataTypes } from "sequelize";
-import sequelize from "../database/PostgreSQL.js";
+import mongoose from 'mongoose'
+const { Schema } = mongoose
 
-const OtpModel = sequelize.define(
-  "Otp",
-  {
-    userId: {
-      type: DataTypes.INTEGER,
-      allowNull: false
-    },
-    otp:{
-        type:DataTypes.INTEGER,
-        allowNull:false
-    },
-    timestamp:{
-        type:DataTypes.DATE,
-        defaultValue: sequelize.literal('CURRENT_TIMESTAMP'),
-    }
+const otpSchema = new Schema({
+  userId: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
   },
-  { timestamps: true }
-);
-export default OtpModel;
+  otp: {
+    type: Number,
+    required: true
+  },
+  timestamp: {
+    type: Date,
+    default: Date.now
+  }
+}, { timestamps: true });
+
+export const OtpModel = mongoose.model('Otp', otpSchema);
+
+
