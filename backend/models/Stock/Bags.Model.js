@@ -1,30 +1,28 @@
-import { DataTypes } from "sequelize";
-import sequelize from "../database/PostgreSQL.js";
+import mongoose from 'mongoose';
 
-const BagsModel = sequelize.define(
-  "Bags",
-  {
-    category: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    color:{
-        type:DataTypes.STRING,
-        allowNull: false
-    },
-    r_Date:{
-        type : DataTypes.DATE,
-        allowNull: false
-    },
-    recently:{
-        type:DataTypes.STRING,
-        allowNull: false
-    },
-    quantity:{
-        type:DataTypes.INTEGER,
-        allowNull: false
-    }
+
+const bagsSchema = new mongoose.Schema({
+  category: {
+    type: String,
+    required: true
   },
-  { timestamps: true }
-);
-export default BagsModel;
+  color: {
+    type: String,
+    required: true
+  },
+  r_Date: {
+    type: Date,
+    required: true
+  },
+  recently: {
+    type: String,
+    required: true
+  },
+  quantity: {
+    type: Number,
+    required: true
+  }
+}, { timestamps: true });
+
+export const BagsModel = mongoose.model('Bags', bagsSchema);
+

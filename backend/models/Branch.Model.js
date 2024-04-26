@@ -1,14 +1,15 @@
-import { DataTypes } from "sequelize";
-import sequelize from "../database/PostgreSQL.js";
+import mongoose from 'mongoose'
 
-const BranchModel = sequelize.define(
-  "Branches",
-  {
-    branchName: {
-      type: DataTypes.STRING,
-      allowNull: false
-    }
-  },
-  { timestamps: true }
-);
-export default BranchModel;
+
+
+
+const branchSchema = new mongoose.Schema({
+  branchName: {
+    type: String,
+    required: true
+  }
+}, { timestamps: true });
+
+export const BranchModel = mongoose.model('Branch', branchSchema);
+
+

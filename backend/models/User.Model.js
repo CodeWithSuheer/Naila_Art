@@ -1,41 +1,38 @@
-import { DataTypes } from "sequelize";
-import sequelize from "../database/PostgreSQL.js";
+import mongoose from 'mongoose'
 
-const UserModel = sequelize.define(
-  "User",
-  {
-    email: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      unique: true,
-    },
-    name: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    password: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    role: {
-      type: DataTypes.ENUM("superadmin", "admin", "user"),
-      allowNull: false,
-      defaultValue: "user",
-    },
-    authenticated: {
-      type: DataTypes.BOOLEAN,
-      allowNull: false,
-      defaultValue: false,
-    },
-    branchId: {
-        type: DataTypes.INTEGER,
-        allowNull: true,
-        defaultValue: null,
-      },
+
+
+
+const userSchema = new  mongoose.Schema({
+  email: {
+    type: String,
+    required: true,
+    unique: true,
   },
-  { timestamps: true }
-);
+  name: {
+    type: String,
+    required: true,
+  },
+  password: {
+    type: String,
+    required: true,
+  },
+  role: {
+    type: String,
+    enum: ['superadmin', 'admin', 'user'],
+    required: true,
+    default: 'user',
+  },
+  authenticated: {
+    type: Boolean,
+    required: true,
+    default: false,
+  },
+  branchId: {
+    type: Number, // or whatever type you need
+    default: null,
+  },
+}, { timestamps: true });
 
-export default UserModel;
-
+export const UserModel = mongoose.model('User', userSchema);
 
