@@ -24,6 +24,7 @@ import Stones from "./pages/process/stones/Stones";
 import './App.css'
 import ForgetPassword from "./auth/ForgetPassword";
 import ResetPassword from "./auth/ResetPassword";
+import OtpChecker from "./auth/OtpChecker";
 
 function App() {
 
@@ -36,6 +37,7 @@ function App() {
           <Route path="/signup" element={<Signup />} />
           <Route path="/forget" element={<ForgetPassword />} />
           <Route path="/reset" element={<ResetPassword />} />
+          <Route path="/otp" element={<OtpChecker />} />
 
           {/* DASHBOARD ROUTE */}
           <Route path="/dashboard" element={<Dashboard />}>

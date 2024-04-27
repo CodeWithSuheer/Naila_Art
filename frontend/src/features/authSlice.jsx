@@ -6,6 +6,8 @@ import toast from "react-hot-toast";
 const signupUrl = "http://localhost:7000/api/users/signup";
 const loginUrl = "http://localhost:7000/api/users/login";
 const forgetPassUrl = "http://localhost:7000/api/users/sendResetPasswordOTP";
+const verifyOtpPassUrl = "http://localhost:7000/api/users/verifyOtp";
+const resetPassUrl = "http://localhost:7000/api/users/updatePassword";
 
 //CREATE ASYNC THUNK
 export const createuserAsync = createAsyncThunk(
@@ -36,6 +38,7 @@ export const loginuserAsync = createAsyncThunk(
   }
 );
 
+
 // FORGET ASYNC THUNK
 export const forgetuserAsync = createAsyncThunk(
   "user/forget",
@@ -51,6 +54,42 @@ export const forgetuserAsync = createAsyncThunk(
     }
   }
 );
+
+
+// VERIFY ASYNC THUNK
+export const verifyOtpAsync = createAsyncThunk(
+  "user/verify",
+  async (formData) => {
+    try {
+      const response = await axios.post(verifyOtpPassUrl, formData);
+      toast.success(response.data.message);
+      console.log(response.data);
+      return response.data;
+    } catch (error) {
+      console.log(error.response.data.error);
+      toast.error(error.response.data.error);
+    }
+  }
+);
+
+
+// RESET ASYNC THUNK
+export const resetPassAsync = createAsyncThunk(
+  "user/reset",
+  async ({ id, resetPassword }) => {
+    try {
+      const response = await axios.post(resetPassUrl, { id, resetPassword });
+      toast.success(response.data.message);
+      console.log(response.data);
+      return response.data;
+    } catch (error) {
+      console.log(error.response.data.error);
+      toast.error(error.response.data.error);
+    }
+  }
+);
+
+
 
 // RESET PASSWORD ASYNC THUNK
 // export const resetpasswordAsync = createAsyncThunk(
@@ -92,6 +131,7 @@ const initialState = {
   createUser: null,
   user: null,
   loading: false,
+  userId: null,
   forgetPasswordEmail: null,
   resetPassword: null,
   validateToken: null,
@@ -122,17 +162,16 @@ const authSlice = createSlice({
       .addCase(loginuserAsync.fulfilled, (state, action) => {
         state.loading = false;
         state.user = action.payload;
-      });
+      })
 
-    //       // FORGET PASSWORD ADD CASE
-    //       .addCase(forgetuserAsync.pending, (state, action) => {
-    //         state.loading = true;
-    //       })
-    //       .addCase(forgetuserAsync.fulfilled, (state, action) => {
-    //         state.loading = false;
-    //         state.forgetPasswordEmail = action.payload;
-    //         state.forgetPasswordEmail = null;
-    //       })
+      // FORGET PASSWORD ADD CASE
+      .addCase(forgetuserAsync.pending, (state, action) => {
+        state.loading = true;
+      })
+      .addCase(forgetuserAsync.fulfilled, (state, action) => {
+        state.loading = false;
+        state.userId = action.payload.userId;
+      })
 
     //       // RESET PASSWORD ADD CASE
     //       .addCase(resetpasswordAsync.pending, (state, action) => {

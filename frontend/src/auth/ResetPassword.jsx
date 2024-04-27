@@ -1,22 +1,42 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
-import { loginuserAsync } from "../features/authSlice";
-import { useDispatch } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { resetPassAsync } from "../features/authSlice";
+import { useDispatch, useSelector } from "react-redux";
 import "./auth.css";
 
 const ResetPassword = () => {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const [showPassword, setShowPassword] = useState(false);
 
+    const id = useSelector((state) => state.auth.userId);
+
     const [formData, setFormData] = useState({
-        oldPassword: "",
-        newPassword: "",
+        password: "",
+        confirmPassword: "",
     });
 
-    const handleSubmit = (e) => {
+    const { password, confirmPassword } = formData;
+
+
+    // HANDLE SUBMIT
+    const handleSubmit = async (e) => {
+        const resetPassword = password;
         e.preventDefault();
-        console.log(formData);
-        dispatch(loginuserAsync(formData));
+        if (password === confirmPassword) {
+            try {
+                await dispatch(resetPassAsync({ id, resetPassword }));
+                navigate('/');
+                setFormData({
+                    password: "",
+                    confirmPassword: "",
+                });
+            } catch (error) {
+                console.error("Error resetting password:", error);
+            }
+        } else {
+            console.error("Passwords do not match");
+        }
     };
 
     const togglePasswordVisibility = () => {
@@ -39,13 +59,13 @@ const ResetPassword = () => {
                             <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6">
 
 
-                                {/* OLD PASSWORD */}
+                                {/* PASSWORD */}
                                 <div>
                                     <label
                                         className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                                         htmlFor="password"
                                     >
-                                        Old Password:
+                                        Password:
                                     </label>
                                     <input
                                         className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -53,32 +73,32 @@ const ResetPassword = () => {
                                         id="password"
                                         name="password"
                                         placeholder="••••••••"
-                                        value={formData.oldPassword}
+                                        value={formData.password}
                                         onChange={(e) =>
-                                            setFormData({ ...formData, oldPassword: e.target.value })
+                                            setFormData({ ...formData, password: e.target.value })
                                         }
                                         required
                                     />
                                 </div>
 
 
-                                {/* New PASSWORD */}
+                                {/* Confirm PASSWORD */}
                                 <div>
                                     <label
                                         className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                                        htmlFor="password"
+                                        htmlFor="confirmpassword"
                                     >
-                                        New Password:
+                                        Confirm Password:
                                     </label>
                                     <input
                                         className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                         type={showPassword ? "text" : "password"}
-                                        id="password"
-                                        name="password"
+                                        id="confirmpassword"
+                                        name="confirmPassword"
                                         placeholder="••••••••"
-                                        value={formData.newPassword}
+                                        value={formData.confirmPassword}
                                         onChange={(e) =>
-                                            setFormData({ ...formData, newPassword: e.target.value })
+                                            setFormData({ ...formData, confirmPassword: e.target.value })
                                         }
                                         required
                                     />
