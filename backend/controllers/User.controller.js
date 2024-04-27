@@ -1,13 +1,17 @@
-import { validateOneMinuteExpiry, validateOtp } from "../middleware/ValidateOtp.js";
+import {
+  validateOneMinuteExpiry,
+  validateOtp,
+} from "../middleware/ValidateOtp.js";
 import bcrypt from "bcrypt";
 import { sendEmail } from "../utils/nodemailer.js";
 import { UserModel } from "../models/User.Model.js";
-import { OtpModel } from '../models/Otp.Model.js'
+import { OtpModel } from "../models/Otp.Model.js";
+import { setMongoose } from "../utils/Mongoose.js";
 export const signUp = async (req, res, next) => {
   try {
     const { email, name, password } = req.body;
     if (!name || !password || !email) throw new Error("Please Fill All fields");
-    const existingUser = await UserModel.findOne({ where: { email: email } });
+    const existingUser = await UserModel.findOne({ email });
     if (existingUser) throw new Error("User Already Exists");
     const hashedPassword = await bcrypt.hash(password, 10);
     await UserModel.create({
@@ -26,16 +30,16 @@ export const login = async (req, res, next) => {
     const { email, password } = req.body;
     if (!email || !password)
       throw new Error("Please provide email and password");
-    const user = await UserModel.findOne({ where: { email: email } });
+    const user = await UserModel.findOne({ email });
     if (!user) throw new Error("Invalid Credentials");
     const validPassowrd = await bcrypt.compare(password, user.password);
     if (!validPassowrd) throw new Error("Invalid Credentials");
     if (!user.authenticated) throw new Error("Unauthorized");
-    const { password: userPassword, ...userData } = user.toJSON();
     req.session.userId = user.id;
+    setMongoose();
     return res
       .status(200)
-      .json({ message: "Login Sucessfull", login: true, userData });
+      .json({ message: "Login Sucessfull", login: true, user });
   } catch (error) {
     return res.status(500).json({ error: error.message });
   }
@@ -56,11 +60,10 @@ export const logout = async (req, res) => {
 
 export const updateUser = async (req, res, next) => {
   try {
-    const { id, authenticated, branchId, role } =
-      req.body;
+    const { id, authenticated, branchId, role } = req.body;
     let updateQuery = {};
     if (!id) throw new Error("User id Not found");
-    const user = await UserModel.findByPk(id);
+    const user = await UserModel.findById(id);
     if (!user) throw new Error("User not found");
     if (authenticated !== undefined) {
       updateQuery = { ...updateQuery, authenticated };
@@ -73,7 +76,7 @@ export const updateUser = async (req, res, next) => {
     }
     if (Object.keys(updateQuery).length === 0)
       throw new Error("No fields to update");
-    await UserModel.update(updateQuery, { where: { id: user.id } });
+    await UserModel.findByIdAndUpdate(id, updateQuery);
     return res.status(200).json({ message: "User updated" });
   } catch (error) {
     return res.status(500).json({ error: error.message });
@@ -85,19 +88,18 @@ export const persistUserSession = async (req, res, next) => {
   if (!id) {
     return res.status(403).send({ message: "Please Login Again" });
   }
-  const user = await UserModel.findByPk(id);
+  const user = await UserModel.findById({ _id: id });
   if (!user) {
     return res.status(404).json({ message: "Invalid Credentials" });
   }
-  const { password: userPassword, ...userData } = user.toJSON();
-  return res.status(200).json({ login: true, userData });
+  setMongoose();
+  return res.status(200).json({ login: true, user });
 };
 
 export const getPendingRequests = async (req, res, next) => {
   try {
-    const requests = await UserModel.findAll({
-      where: { authenticated: false },
-    });
+    const requests = await UserModel.find({ authenticated: false });
+    setMongoose();
     return res.status(200).json(requests);
   } catch (error) {
     return res.status(500).json({ error: error.message });
@@ -107,9 +109,7 @@ export const getPendingRequests = async (req, res, next) => {
 export const getUsersForBranch = async (req, res, next) => {
   try {
     const { branchId } = req.body;
-    const users = await UserModel.findAll({
-      where: { branchId: branchId },
-    });
+    const users = await UserModel.find({ branchId: branchId });
     return res.status(200).json(users);
   } catch (error) {
     return res.status(500).json({ error: error.message });
@@ -121,7 +121,7 @@ export const updatePassword = async (req, res, next) => {
     const { id, oldPassword, newPassword, resetPassword } = req.body;
     let updateQuery = {};
     if (!id) throw new Error("User id Not found");
-    const user = await UserModel.findByPk(id);
+    const user = await UserModel.findById(id);
     if (!user) throw new Error("User not found");
     if (oldPassword && newPassword) {
       const isValidOldPassword = await bcrypt.compare(
@@ -138,7 +138,7 @@ export const updatePassword = async (req, res, next) => {
     }
     if (Object.keys(updateQuery).length === 0)
       throw new Error("No fields to update");
-    await UserModel.update(updateQuery, { where: { id: user.id } });
+    await UserModel.findByIdAndUpdate(id, updateQuery);
     return res.status(200).json({ message: "Password Updated" });
   } catch (error) {
     return res.status(500).json({ error: error.message });
@@ -151,21 +151,16 @@ export const sendResetPasswordOTP = async (req, res, next) => {
     const user = await UserModel.findOne({ email });
     if (!user) throw new Error("User not found");
     const g_Otp = Math.floor(100000 + Math.random() * 900000);
-    const oldOtpData = await OtpModel.findOne({ where: { userId: user.id } });
+    const oldOtpData = await OtpModel.findOne({ userId: user._id });
     if (oldOtpData) {
       const sendNewOtp = await validateOneMinuteExpiry(oldOtpData.timestamp);
       if (!sendNewOtp) throw new Error("Please Try Again After 1 Minute");
     }
     const currentDate = new Date();
     if (oldOtpData) {
-      await OtpModel.update(
-        {
-          otp: g_Otp,
-          timestamp: new Date(currentDate.getTime()),
-        },
-        {
-          where: { userId: user.id },
-        }
+      await OtpModel.updateOne(
+        { userId: user._id },
+        { otp: g_Otp, timestamp: new Date(currentDate.getTime()) }
       );
     } else {
       await OtpModel.create({
@@ -175,7 +170,9 @@ export const sendResetPasswordOTP = async (req, res, next) => {
       });
     }
     await sendEmail({ email, g_Otp });
-    return res.status(200).json({ message: "OTP has been sent to your email", userId: user.id });
+    return res
+      .status(200)
+      .json({ message: "OTP has been sent to your email", userId: user.id });
   } catch (error) {
     return res.status(500).json({ error: error.message });
   }
@@ -184,9 +181,7 @@ export const sendResetPasswordOTP = async (req, res, next) => {
 export const verifyOtp = async (req, res, next) => {
   try {
     const { otp, userId } = req.body;
-    const otpData = await OtpModel.findOne({
-      where: { otp: otp, userId: userId },
-    });
+    const otpData = await OtpModel.findOne({ otp: otp, userId: userId });
     if (!otpData) {
       throw new Error("Invalid OTP");
     }
@@ -194,7 +189,9 @@ export const verifyOtp = async (req, res, next) => {
     if (verifyOtp) {
       throw new Error("OTP Expired");
     }
-    res.status(200).json({ message: "OTP Verified Successfully", OtpVerified: true });
+    res
+      .status(200)
+      .json({ message: "OTP Verified Successfully", OtpVerified: true });
   } catch (error) {
     return res.status(500).json({ error: error.message });
   }

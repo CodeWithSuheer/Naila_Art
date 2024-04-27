@@ -3,9 +3,9 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import toast from "react-hot-toast";
 
 //API URL
-const signupUrl = "http://localhost:8000/api/users/signup";
-const loginUrl = "http://localhost:8000/api/users/login";
-const forgetPassUrl = "http://localhost:8000/api/users/sendResetPasswordOTP";
+const signupUrl = "http://localhost:7000/api/users/signup";
+const loginUrl = "http://localhost:7000/api/users/login";
+const forgetPassUrl = "http://localhost:7000/api/users/sendResetPasswordOTP";
 
 //CREATE ASYNC THUNK
 export const createuserAsync = createAsyncThunk(
