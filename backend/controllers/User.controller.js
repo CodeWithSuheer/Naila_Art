@@ -2,7 +2,7 @@ import { validateOneMinuteExpiry, validateOtp } from "../middleware/ValidateOtp.
 import bcrypt from "bcrypt";
 import { sendEmail } from "../utils/nodemailer.js";
 import { UserModel } from "../models/User.Model.js";
-import {OtpModel} from '../models/Otp.Model.js'
+import { OtpModel } from '../models/Otp.Model.js'
 export const signUp = async (req, res, next) => {
   try {
     const { email, name, password } = req.body;
@@ -24,7 +24,7 @@ export const signUp = async (req, res, next) => {
 export const login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
-    if (!email || !password) 
+    if (!email || !password)
       throw new Error("Please provide email and password");
     const user = await UserModel.findOne({ where: { email: email } });
     if (!user) throw new Error("Invalid Credentials");
@@ -148,7 +148,7 @@ export const updatePassword = async (req, res, next) => {
 export const sendResetPasswordOTP = async (req, res, next) => {
   try {
     const { email } = req.body;
-    const user = await UserModel.findOne({ where: { email: email } });
+    const user = await UserModel.findOne({ email });
     if (!user) throw new Error("User not found");
     const g_Otp = Math.floor(100000 + Math.random() * 900000);
     const oldOtpData = await OtpModel.findOne({ where: { userId: user.id } });
@@ -174,18 +174,18 @@ export const sendResetPasswordOTP = async (req, res, next) => {
         timestamp: new Date(currentDate.getTime()),
       });
     }
-    await sendEmail({email,g_Otp});
-    return res.status(200).json({ message: "OTP has been sent to your email", userId:user.id });
+    await sendEmail({ email, g_Otp });
+    return res.status(200).json({ message: "OTP has been sent to your email", userId: user.id });
   } catch (error) {
     return res.status(500).json({ error: error.message });
   }
 };
 
-export const verifyOtp = async (req,res,next) => {
+export const verifyOtp = async (req, res, next) => {
   try {
-    const {otp,userId} = req.body;
+    const { otp, userId } = req.body;
     const otpData = await OtpModel.findOne({
-      where:{otp:otp,userId:userId},
+      where: { otp: otp, userId: userId },
     });
     if (!otpData) {
       throw new Error("Invalid OTP");
@@ -194,7 +194,7 @@ export const verifyOtp = async (req,res,next) => {
     if (verifyOtp) {
       throw new Error("OTP Expired");
     }
-    res.status(200).json({ message: "OTP Verified Successfully" , OtpVerified:true});
+    res.status(200).json({ message: "OTP Verified Successfully", OtpVerified: true });
   } catch (error) {
     return res.status(500).json({ error: error.message });
   }

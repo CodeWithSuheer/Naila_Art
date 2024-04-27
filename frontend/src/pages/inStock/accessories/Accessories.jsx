@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import data from '../suits/SuitsStockData';
 import { IoAdd } from "react-icons/io5";
 
 const Accessories = () => {
@@ -14,6 +13,38 @@ const Accessories = () => {
         setIsOpen(false);
         document.body.style.overflow = 'auto';
     };
+
+
+    const data = [
+        {
+            serial_no: 'X0001',
+            name: 'Bag',
+            totalQuantity: '1322',
+            date: '20-11-2024',
+            recently: '200',
+        },
+        {
+            serial_no: 'X0001',
+            name: 'Bag',
+            totalQuantity: '1322',
+            date: '20-11-2024',
+            recently: '200',
+        },
+        {
+            serial_no: 'X0001',
+            name: 'Bag',
+            totalQuantity: '1322',
+            date: '20-11-2024',
+            recently: '200',
+        },
+        {
+            serial_no: 'X0001',
+            name: 'Bag',
+            totalQuantity: '1322',
+            date: '20-11-2024',
+            recently: '200',
+        },
+    ]
 
 
     return (
@@ -55,23 +86,6 @@ const Accessories = () => {
 
                 <p className='w-full bg-gray-300 h-px mt-5'></p>
 
-                {/* -------------- TABS -------------- */}
-                <div className="tabs flex justify-between items-center my-5">
-                    <div className="tabs_button">
-                        <button className='border border-gray-500 bg-white dark:bg-gray-700 text-black dark:text-gray-100 px-5 py-2 mx-2 text-sm rounded-md'>All</button>
-                        <button className='border border-gray-500 bg-white dark:bg-gray-700 text-black dark:text-gray-100 px-5 py-2 mx-2 text-sm rounded-md'>Lawn</button>
-                        <button className='border border-gray-500 bg-white dark:bg-gray-700 text-black dark:text-gray-100 px-5 py-2 mx-2 text-sm rounded-md'>Lilan</button>
-                        <button className='border border-gray-500 bg-white dark:bg-gray-700 text-black dark:text-gray-100 px-5 py-2 mx-2 text-sm rounded-md'>Dhanak</button>
-                        <button className='border border-gray-500 bg-white dark:bg-gray-700 text-black dark:text-gray-100 px-5 py-2 mx-2 text-sm rounded-md'>Organza</button>
-                        <button className='border border-gray-500 bg-white dark:bg-gray-700 text-black dark:text-gray-100 px-5 py-2 mx-2 text-sm rounded-md'>Reshmi</button>
-                    </div>
-
-                    <button onClick={openModal} className="inline-block rounded-sm border border-gray-700 bg-gray-600 p-1.5 hover:bg-gray-800 focus:outline-none focus:ring-0">
-                        <IoAdd size={22} className='text-white' />
-                    </button>
-                </div>
-
-
                 {/* -------------- TABLE -------------- */}
                 <div className="relative overflow-x-auto mt-5 ">
                     <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
@@ -81,31 +95,31 @@ const Accessories = () => {
                                     className="px-6 py-3"
                                     scope="col"
                                 >
-                                    D# No
+                                    Serial No
                                 </th>
                                 <th
                                     className="px-6 py-3"
                                     scope="col"
                                 >
-                                    Colors
+                                    Name
                                 </th>
                                 <th
                                     className="px-6 py-3"
                                     scope="col"
                                 >
-                                    Quantity
+                                    Total Quantity
                                 </th>
                                 <th
                                     className="px-6 py-3"
                                     scope="col"
                                 >
-                                    Cost Prices
+                                    R. Date
                                 </th>
                                 <th
                                     className="px-6 py-3"
                                     scope="col"
                                 >
-                                    Sales Prices
+                                    Recently
                                 </th>
                             </tr>
                         </thead>
@@ -115,19 +129,19 @@ const Accessories = () => {
                                     <th className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                                         scope="row"
                                     >
-                                        {data.design_no}
+                                        {data.serial_no}
                                     </th>
                                     <td className="px-6 py-4">
-                                        {data.colors}
+                                        {data.name}
                                     </td>
                                     <td className="px-6 py-4">
-                                        {data.quantity}
+                                        {data.totalQuantity}
                                     </td>
                                     <td className="px-6 py-4">
-                                        {data.cost_pirce}
+                                        {data.date}
                                     </td>
                                     <td className="px-6 py-4">
-                                        {data.sale_pirce}
+                                        {data.recently}
                                     </td>
                                 </tr>
                             ))}

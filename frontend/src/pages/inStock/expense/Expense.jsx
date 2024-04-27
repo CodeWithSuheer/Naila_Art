@@ -1,11 +1,12 @@
 import React, { useState } from 'react'
-import data from '../suits/SuitsStockData';
 import { IoAdd } from "react-icons/io5";
 
 const Expense = () => {
     const [isOpen, setIsOpen] = useState(false);
+    const [messageId, setMessageId] = useState();
 
-    const openModal = () => {
+    const openModal = (msgId) => {
+        setMessageId(msgId);
         setIsOpen(true);
         document.body.style.overflow = 'hidden';
     };
@@ -15,6 +16,38 @@ const Expense = () => {
         document.body.style.overflow = 'auto';
     };
 
+    const data = [
+        {
+            serial_no: 'X0001',
+            name: 'Umer',
+            reason: 'This is the first express ',
+            rate: '200',
+            date: '22-12-24',
+        },
+        {
+            serial_no: 'X0002',
+            name: 'Umer',
+            reason: 'This is the second express ',
+            rate: '200',
+            date: '22-12-24',
+        },
+        {
+            serial_no: 'X0003',
+            name: 'Umer',
+            reason: 'This is the third express ',
+            rate: '200',
+            date: '22-12-24',
+        },
+        {
+            serial_no: 'X0004',
+            name: 'Umer',
+            reason: 'This is the forth express ',
+            rate: '200',
+            date: '22-12-24',
+        },
+    ]
+
+    const filteredMsgData = data.find((data) => data?.serial_no === messageId);
 
     return (
         <>
@@ -59,16 +92,11 @@ const Expense = () => {
                 <div className="tabs flex justify-between items-center my-5">
                     <div className="tabs_button">
                         <button className='border border-gray-500 bg-white dark:bg-gray-700 text-black dark:text-gray-100 px-5 py-2 mx-2 text-sm rounded-md'>All</button>
-                        <button className='border border-gray-500 bg-white dark:bg-gray-700 text-black dark:text-gray-100 px-5 py-2 mx-2 text-sm rounded-md'>Lawn</button>
-                        <button className='border border-gray-500 bg-white dark:bg-gray-700 text-black dark:text-gray-100 px-5 py-2 mx-2 text-sm rounded-md'>Lilan</button>
-                        <button className='border border-gray-500 bg-white dark:bg-gray-700 text-black dark:text-gray-100 px-5 py-2 mx-2 text-sm rounded-md'>Dhanak</button>
-                        <button className='border border-gray-500 bg-white dark:bg-gray-700 text-black dark:text-gray-100 px-5 py-2 mx-2 text-sm rounded-md'>Organza</button>
-                        <button className='border border-gray-500 bg-white dark:bg-gray-700 text-black dark:text-gray-100 px-5 py-2 mx-2 text-sm rounded-md'>Reshmi</button>
+                        <button className='border border-gray-500 bg-white dark:bg-gray-700 text-black dark:text-gray-100 px-5 py-2 mx-2 text-sm rounded-md'>Head Office</button>
+                        <button className='border border-gray-500 bg-white dark:bg-gray-700 text-black dark:text-gray-100 px-5 py-2 mx-2 text-sm rounded-md'>Shop 1</button>
+                        <button className='border border-gray-500 bg-white dark:bg-gray-700 text-black dark:text-gray-100 px-5 py-2 mx-2 text-sm rounded-md'>Shop 2</button>
+                        <button className='border border-gray-500 bg-white dark:bg-gray-700 text-black dark:text-gray-100 px-5 py-2 mx-2 text-sm rounded-md'>Other</button>
                     </div>
-
-                    <button onClick={openModal} className="inline-block rounded-sm border border-gray-700 bg-gray-600 p-1.5 hover:bg-gray-800 focus:outline-none focus:ring-0">
-                        <IoAdd size={22} className='text-white' />
-                    </button>
                 </div>
 
 
@@ -81,31 +109,31 @@ const Expense = () => {
                                     className="px-6 py-3"
                                     scope="col"
                                 >
-                                    D# No
+                                    Serial No
                                 </th>
                                 <th
                                     className="px-6 py-3"
                                     scope="col"
                                 >
-                                    Colors
+                                    Name
                                 </th>
                                 <th
                                     className="px-6 py-3"
                                     scope="col"
                                 >
-                                    Quantity
+                                    Reason
                                 </th>
                                 <th
                                     className="px-6 py-3"
                                     scope="col"
                                 >
-                                    Cost Prices
+                                    Rate
                                 </th>
                                 <th
                                     className="px-6 py-3"
                                     scope="col"
                                 >
-                                    Sales Prices
+                                    Date
                                 </th>
                             </tr>
                         </thead>
@@ -115,19 +143,19 @@ const Expense = () => {
                                     <th className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                                         scope="row"
                                     >
-                                        {data.design_no}
+                                        {data?.serial_no}
                                     </th>
                                     <td className="px-6 py-4">
-                                        {data.colors}
+                                        {data?.name}
+                                    </td>
+                                    <td onClick={() => openModal(data.serial_no)} className="px-6 py-4 cursor-pointer">
+                                        {data?.reason}
                                     </td>
                                     <td className="px-6 py-4">
-                                        {data.quantity}
+                                        {data?.rate}
                                     </td>
                                     <td className="px-6 py-4">
-                                        {data.cost_pirce}
-                                    </td>
-                                    <td className="px-6 py-4">
-                                        {data.sale_pirce}
+                                        {data?.date}
                                     </td>
                                 </tr>
                             ))}
@@ -146,7 +174,7 @@ const Expense = () => {
                         {/* ------------- HEADER ------------- */}
                         <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
                             <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
-                                Add New Base
+                                Expense Details
                             </h3>
                             <button
                                 onClick={closeModal}
@@ -174,59 +202,7 @@ const Expense = () => {
 
                         {/* ------------- BODY ------------- */}
                         <div className="p-4 md:p-5">
-                            <form action="#" className="space-y-4">
-                                <div>
-                                    <input
-                                        name="category"
-                                        type="text"
-                                        placeholder="Enter Category"
-                                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-0 focus:border-gray-300 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-                                        required
-                                    />
-                                </div>
-                                <div>
-                                    <input
-                                        name="color"
-                                        type="text"
-                                        placeholder="Enter Color"
-                                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-0 focus:border-gray-300 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-                                        required
-                                    />
-                                </div>
-                                <div>
-                                    <label
-                                        className="block mb-2 text-sm font-normal text-gray-900 dark:text-white"
-                                        htmlFor="color"
-                                    >
-                                        Start Date
-                                    </label>
-                                    <input
-                                        id="color"
-                                        name="color"
-                                        type="date"
-                                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-0 focus:border-gray-300 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-                                        required
-                                    />
-                                </div>
-                                <div>
-                                    <input
-                                        name="quantity"
-                                        type="text"
-                                        placeholder="Enter Quantity"
-                                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-0 focus:border-gray-300 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-                                        required
-                                    />
-                                </div>
-
-                                <div className="flex justify-center pt-2">
-                                    <button
-                                        type="submit"
-                                        className="inline-block rounded border border-gray-600 bg-gray-600 px-10 py-2.5 text-sm font-medium text-white hover:bg-gray-700 hover:text-gray-100 focus:outline-none focus:ring active:text-indgrayigo-500"
-                                    >
-                                        Submit
-                                    </button>
-                                </div>
-                            </form>
+                            <p>{filteredMsgData?.reason}</p>
                         </div>
                     </div>
                 </div>

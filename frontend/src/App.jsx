@@ -22,6 +22,8 @@ import Cutting from "./pages/process/cutting/Cutting";
 import Stitching from "./pages/process/stitching/Stitching";
 import Stones from "./pages/process/stones/Stones";
 import './App.css'
+import ForgetPassword from "./auth/ForgetPassword";
+import ResetPassword from "./auth/ResetPassword";
 
 function App() {
 
@@ -32,6 +34,8 @@ function App() {
           {/* AUTH ROUTE */}
           <Route path="/" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path="/forget" element={<ForgetPassword />} />
+          <Route path="/reset" element={<ResetPassword />} />
 
           {/* DASHBOARD ROUTE */}
           <Route path="/dashboard" element={<Dashboard />}>

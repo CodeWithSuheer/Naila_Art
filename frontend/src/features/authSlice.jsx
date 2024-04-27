@@ -1,10 +1,11 @@
 import axios from "axios";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-// import toast from "react-hot-toast";
+import toast from "react-hot-toast";
 
 //API URL
 const signupUrl = "http://localhost:8000/api/users/signup";
 const loginUrl = "http://localhost:8000/api/users/login";
+const forgetPassUrl = "http://localhost:8000/api/users/sendResetPasswordOTP";
 
 //CREATE ASYNC THUNK
 export const createuserAsync = createAsyncThunk(
@@ -12,10 +13,11 @@ export const createuserAsync = createAsyncThunk(
   async (formData) => {
     try {
       const response = await axios.post(signupUrl, formData);
+      toast.success(response.data.message);
       console.log(response.data);
       return response.data;
     } catch (error) {
-      console.log(error.message);
+      console.log(error.response.data.error);
     }
   }
 );
@@ -29,26 +31,26 @@ export const loginuserAsync = createAsyncThunk(
       console.log(response);
       return response.data;
     } catch (error) {
-      console.log(error.message);
+      console.log(error.response.data.error);
     }
   }
 );
 
 // FORGET ASYNC THUNK
-// export const forgetuserAsync = createAsyncThunk(
-//   "user/forget",
-//   async (email) => {
-//     try {
-//       const response = await axios.post(forgotPasswordUrl, email);
-//       // console.log(response.data);
-//       toast.success("Reset Password link sent");
-//       return response.data;
-//     } catch (error) {
-//       // console.log("forget password failed", error.response);
-//       toast.error("forget password failed", error.response);
-//     }
-//   }
-// );
+export const forgetuserAsync = createAsyncThunk(
+  "user/forget",
+  async (formData) => {
+    try {
+      const response = await axios.post(forgetPassUrl, formData);
+      toast.success(response.data.message);
+      console.log(response.data);
+      return response.data;
+    } catch (error) {
+      console.log(error.response.data.error);
+      toast.error(error.response.data.error);
+    }
+  }
+);
 
 // RESET PASSWORD ASYNC THUNK
 // export const resetpasswordAsync = createAsyncThunk(
