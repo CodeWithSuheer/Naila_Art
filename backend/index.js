@@ -2,29 +2,21 @@
 import express from "express";
 import cors from "cors";
 import path from "path";
-
-
 import mongoose from "mongoose";
+import cookieParser from "cookie-parser";
 import  MongoDBStore  from "connect-mongodb-session";
 import session from "express-session";
-import SequeLizeStore from "connect-session-sequelize";
 import userRouter from "./routes/UserRoutes.js";
 import branchRouter from "./routes/BranchRoutes.js";
 
 const app = express();
+app.use(cookieParser());
 app.use(cors({
     credentials:true,
     origin:['http://localhost:5173']
   }));
 
 app.use(express.json({limit:'50mb'}));
-
-// const sesssionStore = SequeLizeStore(session.Store);
-// const store = new sesssionStore({
-//     db:sequelize
-// });
-
-
 const MongoDBStoreSession = MongoDBStore(session);
 
 const store = new MongoDBStoreSession({
