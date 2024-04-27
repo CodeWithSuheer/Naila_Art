@@ -3,8 +3,8 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 // import toast from "react-hot-toast";
 
 //API URL
-const signupUrl = "http://localhost:8000/api/users/signup";
-const loginUrl = "http://localhost:8000/api/users/login";
+const signupUrl = "http://localhost:7000/api/users/signup";
+const loginUrl = "http://localhost:7000/api/users/login";
 
 //CREATE ASYNC THUNK
 export const createuserAsync = createAsyncThunk(
@@ -15,7 +15,7 @@ export const createuserAsync = createAsyncThunk(
       console.log(response.data);
       return response.data;
     } catch (error) {
-      console.log(error.message);
+      console.log(error.response.data.error);
     }
   }
 );
@@ -29,7 +29,7 @@ export const loginuserAsync = createAsyncThunk(
       console.log(response);
       return response.data;
     } catch (error) {
-      console.log(error.message);
+      console.log(error.response.data.error);
     }
   }
 );

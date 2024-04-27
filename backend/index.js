@@ -46,6 +46,6 @@ app.use(session({
 // });
 
 app.listen(process.env.PORT,() => {
-    console.log('listening on port http://localhost:8000');
+    console.log(`listening on port http://localhost:${process.env.PORT}`);
 })
 await connectDB();
