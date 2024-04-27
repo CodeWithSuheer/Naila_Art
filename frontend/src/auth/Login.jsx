@@ -1,11 +1,12 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { loginuserAsync } from "../features/authSlice";
 import { useDispatch } from "react-redux";
 import "./auth.css";
 
 const Login = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
 
   const [formData, setFormData] = useState({
@@ -15,7 +16,14 @@ const Login = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(loginuserAsync(formData));
+    dispatch(loginuserAsync(formData))
+      .then(() => {
+        navigate('/dashboard')
+        setFormData({
+          email: "",
+          password: "",
+        });
+      })
   };
 
   const togglePasswordVisibility = () => {

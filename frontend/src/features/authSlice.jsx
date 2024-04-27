@@ -30,10 +30,12 @@ export const loginuserAsync = createAsyncThunk(
   async (formData) => {
     try {
       const response = await axios.post(loginUrl, formData);
+      toast.success(response.data.message);
       console.log(response);
       return response.data;
     } catch (error) {
       console.log(error.response.data.error);
+      toast.error(error.response.data.error);
     }
   }
 );
