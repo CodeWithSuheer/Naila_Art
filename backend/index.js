@@ -3,8 +3,9 @@ import express from "express";
 import cors from "cors";
 import path from "path";
 
-import sequelize, { connectDB } from "./database/PostgreSQL.js";
 
+import mongoose from "mongoose";
+import  MongoDBStore  from "connect-mongodb-session";
 import session from "express-session";
 import SequeLizeStore from "connect-session-sequelize";
 import userRouter from "./routes/UserRoutes.js";
@@ -18,10 +19,19 @@ app.use(cors({
 
 app.use(express.json({limit:'50mb'}));
 
-const sesssionStore = SequeLizeStore(session.Store);
-const store = new sesssionStore({
-    db:sequelize
+// const sesssionStore = SequeLizeStore(session.Store);
+// const store = new sesssionStore({
+//     db:sequelize
+// });
+
+
+const MongoDBStoreSession = MongoDBStore(session);
+
+const store = new MongoDBStoreSession({
+  uri: process.env.MONGODB_URI,
+  collection: 'sessions'
 });
+
 
 app.use(session({
     secret: process.env.SESSION_SECRET,
@@ -45,7 +55,13 @@ app.use(session({
 //   res.sendFile(path.join(root, 'dist/index.html'));
 // });
 
-app.listen(process.env.PORT,() => {
-    console.log(`listening on port http://localhost:${process.env.PORT}`);
+
+mongoose
+.connect(process.env.MONGODB_URI)
+.then(()=>{
+    console.log("Database Connected");
+    app.listen(process.env.PORT,console.log(`Server is running on http://localhost:${process.env.PORT}`))
 })
-await connectDB();
+.catch((error)=>{
+    console.log(error)
+});
