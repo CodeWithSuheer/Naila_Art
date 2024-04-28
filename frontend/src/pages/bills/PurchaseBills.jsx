@@ -1,9 +1,18 @@
 import React, { useState } from 'react'
 import data from './PurchaseBillsData';
 import { IoAdd } from "react-icons/io5";
+import CategoryTable from './CategoryTable';
 
 const PurchaseBills = () => {
     const [isOpen, setIsOpen] = useState(false);
+
+    const [selectedCategory, setSelectedCategory] = useState('Base');
+    const filteredData = data.filter(item => item.category === selectedCategory);
+
+    const handleTabClick = (category) => {
+        setSelectedCategory(category);
+    };
+
 
     const openModal = () => {
         setIsOpen(true);
@@ -58,81 +67,57 @@ const PurchaseBills = () => {
                 {/* -------------- TABS -------------- */}
                 <div className="tabs flex justify-between items-center my-5">
                     <div className="tabs_button">
-                        <button className='border border-gray-500 bg-white dark:bg-gray-700 text-black dark:text-gray-100 px-5 py-2 mx-2 text-sm rounded-md'>Base</button>
-                        <button className='border border-gray-500 bg-white dark:bg-gray-700 text-black dark:text-gray-100 px-5 py-2 mx-2 text-sm rounded-md'>Lace</button>
-                        <button className='border border-gray-500 bg-white dark:bg-gray-700 text-black dark:text-gray-100 px-5 py-2 mx-2 text-sm rounded-md'>Bag</button>
-                        <button className='border border-gray-500 bg-white dark:bg-gray-700 text-black dark:text-gray-100 px-5 py-2 mx-2 text-sm rounded-md'>Accessories</button>
-                        <button className='border border-gray-500 bg-white dark:bg-gray-700 text-black dark:text-gray-100 px-5 py-2 mx-2 text-sm rounded-md'>Expense</button>
+                        {['Base', 'Lace', 'Bag', 'Accessories', 'Expense'].map((category) => (
+                            <button
+                                key={category}
+                                className={`border border-gray-500 bg-white dark:bg-gray-700 text-black dark:text-gray-100 px-5 py-2 mx-2 text-sm rounded-md ${selectedCategory === category ? 'bg-black text-white' : ''}`}
+                                onClick={() => handleTabClick(category)}
+                            >
+                                {category}
+                            </button>
+                        ))}
                     </div>
-
                     <button onClick={openModal} className="inline-block rounded-sm border border-gray-700 bg-gray-600 p-1.5 hover:bg-gray-800 focus:outline-none focus:ring-0">
                         <IoAdd size={22} className='text-white' />
                     </button>
                 </div>
 
 
+                <CategoryTable category={selectedCategory} data={data} />
+
+
+
+
+
+
+
+
+
                 {/* -------------- TABLE -------------- */}
-                <div className="relative overflow-x-auto mt-5 ">
+                {/* <div className="relative overflow-x-auto mt-5">
                     <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                        <thead className="text-sm text-gray-700  bg-gray-100 dark:bg-gray-700 dark:text-gray-200">
+                        <thead className="text-sm text-gray-700 bg-gray-100 dark:bg-gray-700 dark:text-gray-200">
                             <tr>
-                                <th
-                                    className="px-6 py-3"
-                                    scope="col"
-                                >
-                                    D# No
-                                </th>
-                                <th
-                                    className="px-6 py-3"
-                                    scope="col"
-                                >
-                                    Colors
-                                </th>
-                                <th
-                                    className="px-6 py-3"
-                                    scope="col"
-                                >
-                                    Quantity
-                                </th>
-                                <th
-                                    className="px-6 py-3"
-                                    scope="col"
-                                >
-                                    Cost Prices
-                                </th>
-                                <th
-                                    className="px-6 py-3"
-                                    scope="col"
-                                >
-                                    Sales Prices
-                                </th>
+                                <th className="px-6 py-3">Design # No</th>
+                                <th className="px-6 py-3">Colors</th>
+                                <th className="px-6 py-3">Quantity</th>
+                                <th className="px-6 py-3">Cost Price</th>
+                                <th className="px-6 py-3">Sales Price</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {data.map((data, index) => (
+                            {filteredData.map((item, index) => (
                                 <tr key={index} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 dark:text-white">
-                                    <th className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                                        scope="row"
-                                    >
-                                        {data.design_no}
-                                    </th>
-                                    <td className="px-6 py-4">
-                                        {data.colors}
-                                    </td>
-                                    <td className="px-6 py-4">
-                                        {data.quantity}
-                                    </td>
-                                    <td className="px-6 py-4">
-                                        {data.cost_pirce}
-                                    </td>
-                                    <td className="px-6 py-4">
-                                        {data.sale_pirce}
-                                    </td>
+                                    <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">{item.design_no}</td>
+                                    <td className="px-6 py-4">{item.colors}</td>
+                                    <td className="px-6 py-4">{item.quantity}</td>
+                                    <td className="px-6 py-4">{item.cost_pirce}</td>
+                                    <td className="px-6 py-4">{item.sale_pirce}</td>
                                 </tr>
                             ))}
                         </tbody>
                     </table>
-                </div>
+                </div> */}
             </section >
 
 
