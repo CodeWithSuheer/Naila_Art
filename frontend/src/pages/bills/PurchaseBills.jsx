@@ -13,7 +13,6 @@ const PurchaseBills = () => {
         setSelectedCategory(category);
     };
 
-
     const openModal = () => {
         setIsOpen(true);
         document.body.style.overflow = 'hidden';
@@ -84,12 +83,6 @@ const PurchaseBills = () => {
 
 
                 <CategoryTable category={selectedCategory} data={data} />
-
-
-
-
-
-
 
 
 
