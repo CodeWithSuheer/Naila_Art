@@ -25,6 +25,7 @@ import './App.css'
 import ForgetPassword from "./auth/ForgetPassword";
 import ResetPassword from "./auth/ResetPassword";
 import OtpChecker from "./auth/OtpChecker";
+import Shop from "./pages/Shop/Shop";
 
 function App() {
 
@@ -63,6 +64,12 @@ function App() {
             <Route path="cutting" element={<Cutting />} />
             <Route path="stitching" element={<Stitching />} />
             <Route path="stones" element={<Stones />} />
+
+             {/* Shop Crud */}
+
+             <Route path="Shop" element={<Shop />} />
+
+
           </Route>
 
         </Routes>
