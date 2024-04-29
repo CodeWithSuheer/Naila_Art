@@ -2,17 +2,19 @@ import React ,{ useState,useEffect}  from 'react'
 import { IoAdd } from "react-icons/io5";
 import { useDispatch,useSelector } from "react-redux";
 import { GetAllShop, createShopAsync } from '../../features/ShopSlice';
+import { GetUserBYBranch } from '../../features/authSlice';
 
 const Shop = () => {
     const [isOpen, setIsOpen] = useState(false);
     const dispatch = useDispatch();
     const { loading,Shop } = useSelector((state) => state.Shop);
+    const { getUsersForBranch } = useSelector((state) => state.auth);
 
     const [formData, setFormData] = useState({
         branchName: "",
     });
 
-    console.log('shop Name',Shop)
+    console.log('user data',getUsersForBranch)
 
 
     useEffect(() => {
@@ -32,9 +34,17 @@ const Shop = () => {
                 dispatch(GetAllShop())
             }).catch(error)
             {
-                console.log('error')
+                
             }
     };
+
+
+    const fetchbrachUser = (branchId)  => {
+        const data = {
+            branchId:branchId
+        }
+        dispatch(GetUserBYBranch(data))
+    }
 
     const openModal = () => {
         setIsOpen(true);
@@ -86,12 +96,19 @@ const Shop = () => {
                 <p className='w-full bg-gray-300 h-px mt-5'></p>
 
                 {/* -------------- TABS -------------- */}
-                <div className="tabs flex justify-end items-center my-5">
+                <div className="tabs flex justify-between items-center my-5">
                     <div className="tabs_button">
-{Shop?.map((data)=> {
-                        <button className='border border-gray-500 bg-white dark:bg-gray-700 text-black dark:text-gray-100 px-5 py-2 mx-2 text-sm rounded-md'>{data?.branchName}</button>
+                    {Shop?.map((data) => (
+    <button 
+      onClick={() => fetchbrachUser(data?._id)}  className='border border-gray-500 bg-white dark:bg-gray-700 text-black dark:text-gray-100 px-5 py-2 mx-2 text-sm rounded-md' 
+       
+        key={data?._id} // Adding a key prop
+    >
+        {data?.branchName}
+    </button>
+))}
 
-})}
+
 
                      
                     </div>
@@ -164,7 +181,7 @@ const Shop = () => {
                         </tbody>
                     </table>
                 </div>
-            </section >
+            </section>
 
 {isOpen && (
     <div

@@ -26,7 +26,7 @@ export const createShopAsync = createAsyncThunk(
 
 // lOGIN ASYNC THUNK
 export const UpdateShopAsync = createAsyncThunk(
-  "user/login",
+  "Shop/Update",
   async (formData) => {
     try {
       const response = await axios.post(UpdateShop, formData);
@@ -43,7 +43,7 @@ export const UpdateShopAsync = createAsyncThunk(
 
 // FORGET ASYNC THUNK
 export const DeleteShop = createAsyncThunk(
-  "user/forget",
+  "Shop/Delete",
   async (formData) => {
     try {
       const response = await axios.post(DeletShop, formData);
@@ -60,7 +60,7 @@ export const DeleteShop = createAsyncThunk(
 
 // VERIFY ASYNC THUNK
 export const GetAllShop = createAsyncThunk(
-  "user/verify",
+  "Shop/Get",
   async (formData) => {
     try {
       const response = await axios.post(GetShop, formData);

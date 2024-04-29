@@ -3,12 +3,12 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import toast from "react-hot-toast";
 
 //API URL
-const signupUrl = "http://localhost:7000/api/users/signup";
-const loginUrl = "http://localhost:7000/api/users/login";
-const forgetPassUrl = "http://localhost:7000/api/users/sendResetPasswordOTP";
-const verifyOtpPassUrl = "http://localhost:7000/api/users/verifyOtp";
-const resetPassUrl = "http://localhost:7000/api/users/updatePassword";
-
+const signupUrl = "http://localhost:8000/api/users/signup";
+const loginUrl = "http://localhost:8000/api/users/login";
+const forgetPassUrl = "http://localhost:8000/api/users/sendResetPasswordOTP";
+const verifyOtpPassUrl = "http://localhost:8000/api/users/verifyOtp";
+const resetPassUrl = "http://localhost:8000/api/users/updatePassword";
+const getUsersForBranch  = "http://localhost:8000/api/users/getUsersForBranch";
 //CREATE ASYNC THUNK
 export const createuserAsync = createAsyncThunk(
   "user/create",
@@ -92,6 +92,24 @@ export const resetPassAsync = createAsyncThunk(
 );
 
 
+export const GetUserBYBranch = createAsyncThunk(
+  "user/GetUserBYBranch",
+  async (data) => {
+    try {
+      const response = await axios.post(getUsersForBranch, data);
+      toast.success(response.data.message);
+      console.log(response.data);
+      return response.data;
+    } catch (error) {
+      console.log(error.response.data.error);
+      toast.error(error.response.data.error);
+    }
+  }
+);
+
+
+
+
 
 // RESET PASSWORD ASYNC THUNK
 // export const resetpasswordAsync = createAsyncThunk(
@@ -137,6 +155,7 @@ const initialState = {
   forgetPasswordEmail: null,
   resetPassword: null,
   validateToken: null,
+  getUsersForBranch:[]
 };
 
 const authSlice = createSlice({
@@ -173,6 +192,15 @@ const authSlice = createSlice({
       .addCase(forgetuserAsync.fulfilled, (state, action) => {
         state.loading = false;
         state.userId = action.payload.userId;
+      })
+
+
+      .addCase(GetUserBYBranch.pending, (state, action) => {
+        state.loading = true;
+      })
+      .addCase(GetUserBYBranch.fulfilled, (state, action) => {
+        state.loading = false;
+        state.getUsersForBranch = action.payload;
       })
 
     //       // RESET PASSWORD ADD CASE
