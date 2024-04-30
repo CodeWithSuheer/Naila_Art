@@ -1,7 +1,7 @@
 import React ,{ useState,useEffect}  from 'react'
-import { IoAdd } from "react-icons/io5";
+import { IoAdd, IoPencilOutline, IoTrash } from "react-icons/io5";
 import { useDispatch,useSelector } from "react-redux";
-import { GetAllShop, createShopAsync } from '../../features/ShopSlice';
+import { DeleteShop, GetAllShop, UpdateShopAsync, createShopAsync } from '../../features/ShopSlice';
 import { GetUserBYBranch } from '../../features/authSlice';
 
 const Shop = () => {
@@ -9,10 +9,12 @@ const Shop = () => {
     const dispatch = useDispatch();
     const { loading,Shop } = useSelector((state) => state.Shop);
     const { getUsersForBranch } = useSelector((state) => state.auth);
-
+    const [editShop, setEditShop] = useState(null);
+    const [deleteId, setDeleteId] = useState(null); // State to st
     const [formData, setFormData] = useState({
         branchName: "",
     });
+    const [DeleteModal, setDeleteModal] = useState(false);
 
     console.log('user data',getUsersForBranch)
 
@@ -21,30 +23,67 @@ const Shop = () => {
    dispatch(GetAllShop())
     }, [])
     
+    const handleEdit = (shop) => {
+        setEditShop(shop);
+        setFormData({ branchName: shop.branchName }); // Set form data for editing
+        setIsOpen(true);
+       
+    };
+
+    const handleDelete = (shopId) => {
+        setDeleteId(shopId); // Set the ID of the shop to be deleted
+        setDeleteModal(true); // Open confirmation modal
+    };
+    const confirmDelete = () => {
+        if (deleteId) {
+            dispatch(DeleteShop(deleteId))
+                .then(() => {
+                    dispatch(GetAllShop());
+                    setDeleteModal(false); // Close modal after deletion
+                })
+                .catch((error) => {
+                    console.error("Error:", error);
+                });
+        }
+    };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log(formData);
-        dispatch(createShopAsync(formData))
-            .then(() => {
-                
-                setFormData({
-                    branchName: "",
+        const data = { ...formData};
+        if (editShop) {
+            data._id = editShop._id; 
+
+            console.log('delete icon',data)
+            dispatch(UpdateShopAsync(data))
+                .then(() => {
+                    setFormData({ branchName: "" });
+                    setEditShop(null);
+                    closeModal();
+                    dispatch(GetAllShop());
+                })
+                .catch((error) => {
+                    console.error("Error:", error);
                 });
-                dispatch(GetAllShop())
-            }).catch(error)
-            {
-                
-            }
+        } else {
+            dispatch(createShopAsync(data))
+                .then(() => {
+                    setFormData({ branchName: "" });
+                    closeModal();
+                    dispatch(GetAllShop());
+                })
+                .catch((error) => {
+                    console.error("Error:", error);
+                });
+        }
     };
 
 
-    const fetchbrachUser = (branchId)  => {
+    const fetchbrachUser = (branchId) => {
         const data = {
-            branchId:branchId
-        }
-        dispatch(GetUserBYBranch(data))
-    }
+            branchId: branchId
+        };
+        dispatch(GetUserBYBranch(data));
+    };
 
     const openModal = () => {
         setIsOpen(true);
@@ -100,11 +139,16 @@ const Shop = () => {
                     <div className="tabs_button">
                     {Shop?.map((data) => (
     <button 
-      onClick={() => fetchbrachUser(data?._id)}  className='border border-gray-500 bg-white dark:bg-gray-700 text-black dark:text-gray-100 px-5 py-2 mx-2 text-sm rounded-md' 
+      onClick={() => fetchbrachUser(data?._id)}  className='inline-flex gap-4   border border-gray-500 bg-white dark:bg-gray-700 text-black dark:text-gray-100 px-5 py-2 mx-2 text-sm rounded-md' 
        
         key={data?._id} // Adding a key prop
     >
         {data?.branchName}
+
+
+        <IoPencilOutline size={22} className='text-white' onClick={() => handleEdit(data)} />
+        <IoTrash size={22} className='text-white' onClick={() => handleDelete(data._id)} />
+
     </button>
 ))}
 
@@ -192,7 +236,7 @@ const Shop = () => {
             {/* ------------- HEADER ------------- */}
             <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
                 <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
-                    Add New Shop
+                {editShop ? 'Edit Shop' : 'Add New Shop'}
                 </h3>
                 <button
                     onClick={closeModal}
@@ -228,7 +272,7 @@ const Shop = () => {
                             placeholder="Enter Shop Name"
                             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-0 focus:border-gray-300 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
                             required
-                            value={formData.branchName}
+                            value={ formData.branchName}
                             onChange={(e)=> setFormData(e.target.value)}
                         />
                     </div>
@@ -239,7 +283,7 @@ const Shop = () => {
                             type="submit"
                             className="inline-block rounded border border-gray-600 bg-gray-600 px-10 py-2.5 text-sm font-medium text-white hover:bg-gray-700 hover:text-gray-100 focus:outline-none focus:ring active:text-indgrayigo-500"
                         >
-                            Submit
+                           {editShop ? "Update": "Submit" }
                         </button>
                     </div>
                 </form>
@@ -247,6 +291,35 @@ const Shop = () => {
         </div>
     </div>
 )}
+
+
+
+{DeleteModal && (
+                <div
+                    aria-hidden="true"
+                    className="fixed top-0 right-0 left-0 z-50 flex justify-center items-center w-full h-screen bg-gray-800 bg-opacity-50"
+                >
+                    <div className="relative py-4 px-3 w-full max-w-md max-h-full bg-white rounded-md shadow dark:bg-gray-700">
+                        <div className="p-5">
+                            <h2 className="text-lg font-semibold text-gray-800 dark:text-white">Are you sure you want to delete this shop?</h2>
+                            <div className="flex justify-end mt-4">
+                                <button
+                                    onClick={() => setDeleteModal(false)}
+                                    className="inline-block rounded border border-gray-600 bg-gray-600 px-4 py-2 text-sm font-medium text-white mr-2 hover:bg-gray-700 hover:text-gray-100 focus:outline-none focus:ring"
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    onClick={confirmDelete}
+                                    className="inline-block rounded border border-red-600 bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700 hover:text-white focus:outline-none focus:ring"
+                                >
+                                    Yes, Delete
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
 
 </>
 
