@@ -16,8 +16,7 @@ const Shop = () => {
     });
     const [DeleteModal, setDeleteModal] = useState(false);
 
-    console.log('user data',getUsersForBranch)
-
+   
 
     useEffect(() => {
    dispatch(GetAllShop())
@@ -36,7 +35,11 @@ const Shop = () => {
     };
     const confirmDelete = () => {
         if (deleteId) {
-            dispatch(DeleteShop(deleteId))
+const data ={
+    branchId:deleteId
+}
+
+            dispatch(DeleteShop(data))
                 .then(() => {
                     dispatch(GetAllShop());
                     setDeleteModal(false); // Close modal after deletion
@@ -51,14 +54,14 @@ const Shop = () => {
         e.preventDefault();
         const data = { ...formData};
         if (editShop) {
-            data._id = editShop._id; 
+            data.branchId = editShop._id; 
 
             console.log('delete icon',data)
             dispatch(UpdateShopAsync(data))
                 .then(() => {
                     setFormData({ branchName: "" });
                     setEditShop(null);
-                    closeModal();
+                   setIsOpen(false)
                     dispatch(GetAllShop());
                 })
                 .catch((error) => {
@@ -68,7 +71,8 @@ const Shop = () => {
             dispatch(createShopAsync(data))
                 .then(() => {
                     setFormData({ branchName: "" });
-                    closeModal();
+                    setIsOpen(false)
+
                     dispatch(GetAllShop());
                 })
                 .catch((error) => {
@@ -139,16 +143,13 @@ const Shop = () => {
                     <div className="tabs_button">
                     {Shop?.map((data) => (
     <button 
-      onClick={() => fetchbrachUser(data?._id)}  className='inline-flex gap-4   border border-gray-500 bg-white dark:bg-gray-700 text-black dark:text-gray-100 px-5 py-2 mx-2 text-sm rounded-md' 
-       
-        key={data?._id} // Adding a key prop
+        
+        className='inline-flex gap-4 border border-gray-500 bg-white dark:bg-gray-700 text-black dark:text-gray-100 px-5 py-2 mx-2 text-sm rounded-md' 
+        key={data?._id}
     >
         {data?.branchName}
-
-
         <IoPencilOutline size={22} className='text-white' onClick={() => handleEdit(data)} />
         <IoTrash size={22} className='text-white' onClick={() => handleDelete(data._id)} />
-
     </button>
 ))}
 
@@ -273,7 +274,8 @@ const Shop = () => {
                             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-0 focus:border-gray-300 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
                             required
                             value={ formData.branchName}
-                            onChange={(e)=> setFormData(e.target.value)}
+                            onChange={(e) => setFormData({ ...formData, [e.target.name]: e.target.value })}
+
                         />
                     </div>
                   
