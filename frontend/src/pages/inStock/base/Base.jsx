@@ -104,7 +104,7 @@ const Base = () => {
                         </thead>
                         <tbody>
                             {data.map((data, index) => (
-                                <tr key={index} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 dark:text-white">
+                                <tr key={index} className="bg-white border-b text-md font-semibold dark:bg-gray-800 dark:border-gray-700 dark:text-white">
 
                                     <td className="px-6 py-4">
                                         {data.colors}

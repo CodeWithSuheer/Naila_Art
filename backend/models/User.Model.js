@@ -6,16 +6,16 @@ import mongoose from 'mongoose'
 const userSchema = new  mongoose.Schema({
   email: {
     type: String,
-    required: true,
+    required: [true,"Email required"],
     unique: true,
   },
   name: {
     type: String,
-    required: true,
+    required: [true,"Name required"],
   },
   password: {
     type: String,
-    required: true,
+    required: [true,"Password required"],
   },
   role: {
     type: String,
@@ -25,11 +25,10 @@ const userSchema = new  mongoose.Schema({
   },
   authenticated: {
     type: Boolean,
-    required: true,
     default: false,
   },
   branchId: {
-    type: Number, // or whatever type you need
+    type: mongoose.Types.ObjectId,
     default: null,
   },
 }, { timestamps: true });

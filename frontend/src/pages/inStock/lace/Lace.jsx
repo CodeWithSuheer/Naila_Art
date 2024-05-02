@@ -1,19 +1,43 @@
 import React, { useState } from 'react'
-import data from '../suits/SuitsStockData';
-import { IoAdd } from "react-icons/io5";
 
 const Lace = () => {
     const [isOpen, setIsOpen] = useState(false);
 
-    const openModal = () => {
-        setIsOpen(true);
-        document.body.style.overflow = 'hidden';
-    };
+    const data = [
+        {
+            bill_no: '1',
+            name: 'Lace',
+            category: 'Karachi Border',
+            totalQuantity: '500',
+            date: '10-12-2021',
+            recently: '150',
+        },
+        {
+            bill_no: '2',
+            name: 'Lace',
+            category: 'Karachi Border',
+            totalQuantity: '500',
+            date: '10-12-2021',
+            recently: '150',
+        },
+        {
+            bill_no: '3',
+            name: 'Lace',
+            category: 'Karachi Border',
+            totalQuantity: '500',
+            date: '10-12-2021',
+            recently: '150',
+        },
+        {
+            bill_no: '4',
+            name: 'Lace',
+            category: 'Karachi Border',
+            totalQuantity: '500',
+            date: '10-12-2021',
+            recently: '150',
+        },
+    ]
 
-    const closeModal = () => {
-        setIsOpen(false);
-        document.body.style.overflow = 'auto';
-    };
 
 
     return (
@@ -55,22 +79,6 @@ const Lace = () => {
 
                 <p className='w-full bg-gray-300 h-px mt-5'></p>
 
-                {/* -------------- TABS -------------- */}
-                <div className="tabs flex justify-between items-center my-5">
-                    <div className="tabs_button">
-                        <button className='border border-gray-500 bg-white dark:bg-gray-700 text-black dark:text-gray-100 px-5 py-2 mx-2 text-sm rounded-md'>All</button>
-                        <button className='border border-gray-500 bg-white dark:bg-gray-700 text-black dark:text-gray-100 px-5 py-2 mx-2 text-sm rounded-md'>Lawn</button>
-                        <button className='border border-gray-500 bg-white dark:bg-gray-700 text-black dark:text-gray-100 px-5 py-2 mx-2 text-sm rounded-md'>Lilan</button>
-                        <button className='border border-gray-500 bg-white dark:bg-gray-700 text-black dark:text-gray-100 px-5 py-2 mx-2 text-sm rounded-md'>Dhanak</button>
-                        <button className='border border-gray-500 bg-white dark:bg-gray-700 text-black dark:text-gray-100 px-5 py-2 mx-2 text-sm rounded-md'>Organza</button>
-                        <button className='border border-gray-500 bg-white dark:bg-gray-700 text-black dark:text-gray-100 px-5 py-2 mx-2 text-sm rounded-md'>Reshmi</button>
-                    </div>
-
-                    <button onClick={openModal} className="inline-block rounded-sm border border-gray-700 bg-gray-600 p-1.5 hover:bg-gray-800 focus:outline-none focus:ring-0">
-                        <IoAdd size={22} className='text-white' />
-                    </button>
-                </div>
-
 
                 {/* -------------- TABLE -------------- */}
                 <div className="relative overflow-x-auto mt-5 ">
@@ -81,53 +89,62 @@ const Lace = () => {
                                     className="px-6 py-3"
                                     scope="col"
                                 >
-                                    D# No
+                                    Bill No
                                 </th>
                                 <th
                                     className="px-6 py-3"
                                     scope="col"
                                 >
-                                    Colors
+                                    Name
                                 </th>
                                 <th
                                     className="px-6 py-3"
                                     scope="col"
                                 >
-                                    Quantity
+                                    Cetegory
                                 </th>
                                 <th
                                     className="px-6 py-3"
                                     scope="col"
                                 >
-                                    Cost Prices
+                                    Total Quantity
                                 </th>
                                 <th
                                     className="px-6 py-3"
                                     scope="col"
                                 >
-                                    Sales Prices
+                                    R. Date
+                                </th>
+                                <th
+                                    className="px-6 py-3"
+                                    scope="col"
+                                >
+                                    Recently
                                 </th>
                             </tr>
                         </thead>
                         <tbody>
                             {data.map((data, index) => (
-                                <tr key={index} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 dark:text-white">
+                                <tr key={index} className="bg-white border-b text-md font-semibold dark:bg-gray-800 dark:border-gray-700 dark:text-white">
                                     <th className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                                         scope="row"
                                     >
-                                        {data.design_no}
+                                        {data.bill_no}
                                     </th>
                                     <td className="px-6 py-4">
-                                        {data.colors}
+                                        {data.name}
                                     </td>
                                     <td className="px-6 py-4">
-                                        {data.quantity}
+                                        {data.category}
                                     </td>
                                     <td className="px-6 py-4">
-                                        {data.cost_pirce}
+                                        {data.totalQuantity} m
                                     </td>
                                     <td className="px-6 py-4">
-                                        {data.sale_pirce}
+                                        {data.date}
+                                    </td>
+                                    <td className="px-6 py-4">
+                                        {data.recently} m
                                     </td>
                                 </tr>
                             ))}

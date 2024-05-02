@@ -3,17 +3,18 @@ const { Schema } = mongoose
 
 const otpSchema = new Schema({
   userId: {
-    type: Schema.Types.ObjectId,
-    ref: 'User',
-    required: true
+    type:mongoose.Types.ObjectId,
+     required:[true,"Please Provide User Id"]
   },
   otp: {
     type: Number,
-    required: true
+    required:[true,"Please Provide Otp"]
   },
   timestamp: {
     type: Date,
-    default: Date.now
+    default: Date.now(),
+    get:(timestamp)=>timestamp.getTime(),
+    set:(timestamp)=>new Date(timestamp)
   }
 }, { timestamps: true });
 

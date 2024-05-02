@@ -143,7 +143,7 @@ const SuitsStock = () => {
                         </thead>
                         <tbody>
                             {data.map((data, index) => (
-                                <tr key={index} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 dark:text-white">
+                                <tr key={index} className="bg-white border-b text-md font-semibold dark:bg-gray-800 dark:border-gray-700 dark:text-white">
                                     <th className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                                         scope="row"
                                     >
@@ -156,7 +156,7 @@ const SuitsStock = () => {
                                         {data.quantity}
                                     </td>
                                     <td className="px-6 py-4">
-                                        {data.cost_pirce}
+                                        Rs {data.cost_pirce}
                                     </td>
                                     <td className="px-6 py-4">
                                         {data.sale_pirce}

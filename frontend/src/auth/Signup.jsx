@@ -16,7 +16,14 @@ const Signup = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(formData);
-    dispatch(createuserAsync(formData));
+    dispatch(createuserAsync(formData))
+      .then(() => {
+        setFormData({
+          name: "",
+          email: "",
+          password: "",
+        });
+      })
   };
 
   const togglePasswordVisibility = () => {
@@ -25,14 +32,9 @@ const Signup = () => {
 
   return (
     <>
-      <section className="bg-gradient-to-t from-[#fbc2eb] to-[#a6c1ee]">
-        <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
-          <div className="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white">
-            <img
-              alt="logo"
-              className="w-8 h-8 mr-2"
-              src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/logo.svg"
-            />
+      <section className="bg">
+        <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto min-h-screen lg:py-0">
+          <div className="flex items-center mb-6 text-4xl font-semibold tracking-wider text-gray-100 dark:text-white">
             NAILA ARTS
           </div>
           <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
@@ -107,6 +109,8 @@ const Signup = () => {
                   />
                 </div>
 
+
+                {/* TOGGLE PASSWORD VISIBILITY */}
                 <div className="flex items-start">
                   <div className="flex items-start">
                     <div className="flex items-center h-5">
@@ -136,6 +140,7 @@ const Signup = () => {
                 >
                   Create an account
                 </button>
+                
                 <p className="text-sm font-light text-gray-500 dark:text-gray-400">
                   Already have an account?{" "}
                   <Link
